@@ -3,7 +3,7 @@
 
 org 100h
 
-program:    
+program:    ; Initalize the variables
 
     mov  curr_line, offset matrix
     mov  curr_char, 0
@@ -24,6 +24,10 @@ start:
     je   moveRight
     cmp  ax, 5000h       ; DOWN.
     je   moveDown
+    cmp  ax, 1C0Dh       ; ENTER.
+    je   moveNewLine
+    cmp  ax, 4700h       ; HOME.
+    je   moveToBeginning
     cmp  al, 32
     jae  any_char
     jmp  start   
@@ -80,12 +84,29 @@ moveDown:
     mov  dh, posY
     inc  dh              ; posY ++
     mov  posY, dh
-    jmp  prntCrs        
+    jmp  prntCrs 
+
+;ENTER.
+moveNewLine:
+    add curr_line, 80
+    mov posX, 0
+    mov dl, posX
+    mov dh, posY
+    inc dh
+    mov posY, dh
+    jmp prntCrs
+
+;HOME
+moveToBeginning:
+    mov curr_char, 0
+    mov posX, 0
+    mov dl, posX
+    jmp prntCrs
 
 prntCrs:                 ; print cursor
     mov  ah, 2h
     int  10h
-    jmp  start
+    jmp  start           ; Go back to the beginning
 
 fin:
     int  20h 
