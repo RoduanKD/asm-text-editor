@@ -130,13 +130,11 @@ moveDown:
 
 ;ENTER.
 moveNewLine:        
-    mov si , curr_line
-    add si , curr_char
-    mov [si] , 0ah
-    mov [si+1] , 0dh
-    sub si , curr_char
-    lea si, si+1
-    mov curr_line,si
+    mov si, curr_line
+    add si, 79
+    mov [si], 0dh
+    add curr_line, 80
+    mov curr_char, 0
     mov posX, 0
     mov dl, posX
     mov dh, posY
