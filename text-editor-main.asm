@@ -155,6 +155,25 @@ backSpace:
     cmp curr_char, 0
     je  preventBackSpace
 
+;UPDATE CHAR IN MATRIX.
+    dec curr_char
+    mov si, curr_line   ; si points to the beginning of the line.
+    add si, curr_char   ; si points to the char in the line.
+    mov [ si ], ' '     ; the char is in the matrix.
+    dec length          ; count the number of chars
+    dec posX
+    mov dl, posX
+;Move the cursor
+    mov  ah, 2h
+    int  10h
+;Update the Screen    
+    mov  al,' '
+    mov  ah, 9
+    mov  bh, 0
+    mov  bl, 0000
+    mov  cx, 1           ; how many times display char.
+    int  10h             ; display char in al.
+    jmp prntCrs
 prntCrs:                 ; print cursor
     mov  ah, 2h
     int  10h
