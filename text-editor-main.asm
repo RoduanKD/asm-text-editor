@@ -129,8 +129,14 @@ moveDown:
     jmp  prntCrs 
 
 ;ENTER.
-moveNewLine:
-    add curr_line, 80
+moveNewLine:        
+    mov si , curr_line
+    add si , curr_char
+    mov [si] , 0ah
+    mov [si+1] , 0dh
+    sub si , curr_char
+    lea si, si+1
+    mov curr_line,si
     mov posX, 0
     mov dl, posX
     mov dh, posY
