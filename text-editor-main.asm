@@ -149,6 +149,11 @@ moveToBeginning:
     mov posX, 0
     mov dl, posX
     jmp prntCrs
+    
+backSpace:
+;check if this is the first char in the line
+    cmp curr_char, 0
+    je  preventBackSpace
 
 prntCrs:                 ; print cursor
     mov  ah, 2h
@@ -179,8 +184,11 @@ saveToFile:
   mov  ah, 3eh
   mov  bx, handler
   int  21h
-  jmp fin  
-    
+  jmp fin
+  
+preventBackSpace:
+    call read_char
+
 ;;--------------------------------------------------------------------;;
 ;;                                                                    ;;
 ;;  Clear the sceen                                                   ;;
@@ -234,6 +242,8 @@ read_char proc
     je   moveToBeginning
     cmp  ax, 3F00h       ; F5.
     je   saveToFile
+    cmp  ax, 0E08h       ; BackSpace.
+    je   backSpace
     cmp  al, 32
     jae  any_char
     jmp  start
